@@ -28,7 +28,7 @@ def asticaAPI(endpoint, payload, timeout):
         return {'status': 'error', 'error': 'Failed to connect to the API.'}
 
 
-asticaAPI_key = 'F886162E-F7AE-4B55-9001-8E312DE1D758C4EBD122-F746-4CB2-B3CC-5798F23EBCC3'  # visit https://astica.ai
+asticaAPI_key = st.secret["astica_API_key"]  # visit https://astica.ai
 asticaAPI_timeout = 35  # seconds  Using "gpt" or "gpt_detailed" will increase response time.
 
 asticaAPI_endpoint = 'https://vision.astica.ai/describe'
