@@ -3,6 +3,7 @@ import json
 import base64
 import os
 import streamlit as st
+import pandas as pd
 def save_image(image_data, filename):
     # Write the image_data to a new file with the given filename
     with open(filename, "wb") as f:
@@ -28,16 +29,15 @@ def asticaAPI(endpoint, payload, timeout):
         return {'status': 'error', 'error': 'Failed to connect to the API.'}
 
 
-asticaAPI_key = st.secret["astica_API_key"]  # visit https://astica.ai
+asticaAPI_key = st.secrets[astica_API_key'] # visit https://astica.ai
 asticaAPI_timeout = 35  # seconds  Using "gpt" or "gpt_detailed" will increase response time.
 
 asticaAPI_endpoint = 'https://vision.astica.ai/describe'
-asticaAPI_modelVersion = '2.1_full'  # '1.0_full', '2.0_full', or '2.1_full'
+asticaAPI_modelVersion = '2.0_full'  # '1.0_full', '2.0_full', or '2.1_full'
 
 # Input Method 1: https URL of a jpg/png image (faster)
 # asticaAPI_input = 'https://www.astica.org/inputs/analyze_3.jpg'
-# st.title("Image Uploader App")
-st.title("Alt data fetcher App")
+st.title("Image Uploader App")
 st.write("Please upload an image.")
 uploaded_file = st.file_uploader("Upload Image", type=["jpg", "jpeg", "png"])
 if uploaded_file is not None:
@@ -54,35 +54,35 @@ if uploaded_file is not None:
     asticaAPI_input = f"data:image/{image_extension[1:]};base64,{base64.b64encode(image_data).decode('utf-8')}"
 
 
-    asticaAPI_visionParams = 'gpt,description,objects,faces'  # comma separated options; leave blank for all; note "gpt" and "gpt_detailed" are slow.
-    '''
-        '1.0_full' supported options:
-            description
-            objects
-            categories
-            moderate
-            tags
-            brands
-            color
-            faces
-            celebrities
-            landmarks
-            gpt new (Slow - be patient)
-            gpt_detailed new (Much Slower)
-    
-        '2.0_full' supported options:
-            description
-            objects
-            tags
-            describe_all new
-            text_read new
-            gpt new (Slow - be patient)
-            gpt_detailed new (Much Slower)
-    
-        '2.1_full' supported options:
-            Supports all options 
-    
-    '''
+    asticaAPI_visionParams = 'describe_all'  # comma separated options; leave blank for all; note "gpt" and "gpt_detailed" are slow.
+    # '''
+    #     '1.0_full' supported options:
+    #         description
+    #         objects
+    #         categories
+    #         moderate
+    #         tags
+    #         brands
+    #         color
+    #         faces
+    #         celebrities
+    #         landmarks
+    #         gpt new (Slow - be patient)
+    #         gpt_detailed new (Much Slower)
+    #
+    #     '2.0_full' supported options:
+    #         description
+    #         objects
+    #         tags
+    #         describe_all new
+    #         text_read new
+    #         gpt new (Slow - be patient)
+    #         # gpt_detailed new (Much Slower)
+    #
+    #     '2.1_full' supported options:
+    #         Supports all options
+    #
+    # '''
 
     # Define payload dictionary
     asticaAPI_payload = {
@@ -95,9 +95,17 @@ if uploaded_file is not None:
     # Call API function and store result
     asticaAPI_result = asticaAPI(asticaAPI_endpoint, asticaAPI_payload, asticaAPI_timeout)
 
+    # Display the original asticaAPI_result dictionary as JSON
+    st.write("API Result:", asticaAPI_result)
+
+    # Display key-value pairs of the asticaAPI_result dictionary
+    for key, value in asticaAPI_result.items():
+        st.write(f"{key}: {value}")
     print('\nastica API Output:')
-    print(json.dumps(asticaAPI_result, indent=4))
+    # print(json.dumps(asticaAPI_result, indent=4))
     st.write(json.dumps(asticaAPI_result, indent=4))
+    # result_df = pd.DataFrame.from_dict(asticaAPI_result)
+    # st.dataframe(result_df)
     # print('=================')
     # print('=================')
 
