@@ -36,7 +36,8 @@ asticaAPI_modelVersion = '2.1_full'  # '1.0_full', '2.0_full', or '2.1_full'
 
 # Input Method 1: https URL of a jpg/png image (faster)
 # asticaAPI_input = 'https://www.astica.org/inputs/analyze_3.jpg'
-st.title("Image Uploader App")
+# st.title("Image Uploader App")
+st.title("Alt data fetcher App")
 st.write("Please upload an image.")
 uploaded_file = st.file_uploader("Upload Image", type=["jpg", "jpeg", "png"])
 if uploaded_file is not None:
